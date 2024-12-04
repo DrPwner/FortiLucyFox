@@ -1,0 +1,169 @@
+/* static/css/kql.css */
+
+.KQL-TH-Button {
+    position: fixed;
+    bottom: 60px;
+    right: 20px;
+    padding: 10px 15px;
+    background-color: #295bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    z-index: 1000;
+}
+
+.custom-notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.KQL-TH-Button:hover{
+    background-color: #00028f;
+}
+
+#kql-hunting-modal .modal-content {
+    width: 90%;
+    height: 80%;
+    max-width: 1200px;
+    max-height: 800px;
+    display: flex;
+    flex-direction: column;
+}
+
+#kql-hunting-content {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+#kql-table-sidebar {
+    min-width: 200px;
+    max-width: 300px;
+    overflow-y: auto;
+    background-color: #f1f1f1;
+    padding: 10px;
+    flex-shrink: 0;
+}
+
+#kql-table-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.kql-sidebar-item {
+    cursor: pointer;
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.kql-sidebar-item:hover {
+    background-color: #d0d0d0;
+}
+
+#kql-hunting-content table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#kql-hunting-content th, #kql-hunting-content td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#kql-hunting-content th {
+    background-color: #f2f2f2;
+}
+
+#kql-hunting-content button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+#kql-hunting-content button:hover {
+    background-color: #45a049;
+}
+
+#kql-table-content table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+#kql-table-content th, #kql-table-content td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+
+.modal {
+    display: flex;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border-radius: 5px;
+    width: 50%;
+    max-width: 500px;
+}
+
+.modal-content textarea {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modal-buttons button {
+    margin-left: 10px;
+}
+
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    left: 45%;
+    transform: translateX(-50%) translateY(-100%);
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+}
