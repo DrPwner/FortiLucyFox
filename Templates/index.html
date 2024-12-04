@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortilucene Query Builder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/threat_hunting.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/threat_intel.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/kql.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <canvas id="background-canvas"></canvas>
+    <div id="main-container">
+        <div id="query-builder-container">
+            <h1 id="fortilucene-query-builder" class="title">
+                <a href="https://github.com/DrPwner/FortiLucyFox" target="_blank" rel="noopener noreferrer" class="title-link">FortiLucyFox</a>
+            </h1>
+            
+            <div id="query-parts"></div>
+        </div>
+
+        <div id="build-query-container">
+            <button id="build-query">Build Query</button>
+        </div>
+
+        <div id="query-result-container">
+            <h3>Query Result:</h3>
+            <div id="query-result"></div>
+            <button id="copy-query">Copy Query</button>
+            <button id="save-query">Save Query</button>
+        </div>
+    </div>
+
+    <button id="toggle-animation" class="toggle-btn">Disable Animation</button>
+    <button id="help-button" class="help-btn" >Help</button>
+    <div id="edit-database-btn-container">
+        <button id="edit-database-btn">Edit FortiLucene Database</button>
+    </div>
+    <div id="help-menu" class="help-menu">
+        <div class="help-content">
+            <h2>
+                <a href="https://docs.fortinet.com/document/fortiedr/6.2.0/administration-guide/142063/appendix-b-lucene-syntax" target="_blank" rel="noopener noreferrer" class="luceneHelp">FortiLucene Query Builder Help</a>
+            </h2>
+            <h3>Examples</h3>
+            <ul id="examples-list"></ul>
+            <h3>Operators</h3>
+            <table id="operators-table">
+                <tbody></tbody>
+            </table>
+            <h3>Wildcards</h3>
+            <p id="wildcards-content"></p>
+            <h3>Ranges</h3>
+            <p id="ranges-content"></p>
+            <h3>Reserved Characters</h3>
+            <p id="reserved-chars-content"></p>
+        </div>
+        <button id="close-help" class="close-btn">&times;</button>
+    </div>
+
+    <div id="database-editor" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit FortiLucene Database</h2>
+            <div id="database-content">
+                <!-- Table content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <canvas id="background-canvas"></canvas>
+
+
+  
+    <div id="custom-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title"></h2>
+            <input type="text" id="modal-input">
+            <div class="modal-buttons">
+                <button id="modal-cancel">Cancel</button>
+                <button id="modal-confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <button id="kql-hunting-btn" class="KQL-TH-Button">KQL Threat Hunting</button>
+    <button id="threat-hunting-btn" class="TI-TH-Button">Lucene Threat Hunting</button>
+    <button id="threat-intel-btn" class="TI-button">FortiFox Threat Intelligence</button>
+   
+    <div id="threat-hunting-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Lucene Threat Hunting Queries</h2>
+            <div id="threat-hunting-content" class="modal-body">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+
+    <div id="threat-intel-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>
+                <a href="https://threatfox.abuse.ch/" target="_blank" rel="noopener noreferrer" class="fortifoxTI">FortiFox Threat Intelligence</a>
+
+            </h2>
+            <div id="threat-intel-content">
+                <div id="ioc-search-container">
+                    <input type="text" id="ioc-search-input" placeholder="Search IOCs...">
+                    <p id="search-instructions">
+                        Use * for any number of characters, ? for a single character. 
+                        Example: "192.168.*.*" or "malware?.exe"
+                    </p>
+                    <div id="ioc-btn-container">
+                        <button id="add-ioc-btn">Add an IOC</button>
+                        <button id="bulk-import-btn">Bulk Import</button>
+                        <input type="file" id="bulk-import-input" accept=".csv" style="display: none;">
+                        <a href="/get_import_sample" download="ioc_import_sample.csv" id="download-sample">Download Sample CSV</a>
+                    </div>
+                </div>
+                <div id="ioc-search-results"></div>
+            </div>
+        </div>
+    </div>
+    
+    
+            <form id="add-ioc-form" style="display: none;">
+                <span class="close-form">&times;</span>
+                <input type="text" name="ioc_value" placeholder="IOC Value" required>
+                <select name="ioc_type" required>
+                    <option value="">Select IOC Type</option>
+                    <option value="url">URL</option>
+                    <option value="ip:port">IP:Port</option>
+                    <option value="domain">Domain</option>
+                    <option value="md5_hash">MD5 Hash</option>
+                    <option value="sha256_hash">SHA256 Hash</option>
+                    <option value="sha1_hash">SHA1 Hash</option>
+                    <option value="sha3_384_hash">SHA3-384 Hash</option>
+                </select>
+                <input type="text" name="threat_type" placeholder="Threat Type" required>
+                <input type="text" name="malware" placeholder="Malware" required>
+                <input type="text" name="malware_alias" placeholder="Malware Alias" required>
+                <input type="text" name="malware_printable" placeholder="Malware Printable" required>
+                <input type="datetime-local" name="first_seen_utc" required>
+                <select name="confidence_level" required>
+                    <option value="">Select Confidence Level</option>
+                    <option value="10">10%</option>
+                    <option value="20">20%</option>
+                    <option value="30">30%</option>
+                    <option value="40">40%</option>
+                    <option value="50">50%</option>
+                    <option value="60">60%</option>
+                    <option value="70">70%</option>
+                    <option value="80">80%</option>
+                    <option value="90">90%</option>
+                    <option value="100">100%</option>
+                </select>
+                <input type="text" name="tags" placeholder="Tags (comma-separated)" required>
+                <input type="text" name="reporter" placeholder="Reporter" required>
+                <button type="submit">Add IOC</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="kql-hunting-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>KQL Threat Hunting Queries</h2>
+            <div id="kql-hunting-content" class="modal-body">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <div id="threat-hunting-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Threat Intelligence & Threat Hunting</h2>
+            <div id="threat-hunting-content" class="modal-body">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/db.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/background.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/TH.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/TI.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/kql.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
+
+</body>
+</html>
